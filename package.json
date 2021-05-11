@@ -5,11 +5,21 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "dev:worker": "wait-on .next/server/worker.js && dotenv -c -- nodemon .next/server/worker.js -w src/server -w src/shared"
   },
   "dependencies": {
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.6",
+    "mongoose": "^5.12.8",
     "next": "10.2.0",
+    "next-connect": "^0.10.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "sass": "^1.32.12"
+  },
+  "devDependencies": {
+    "wait-on": "^5.3.0"
   }
 }
