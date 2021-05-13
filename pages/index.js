@@ -1,10 +1,11 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import { connectToDatabase } from "../util/mongodb";
+// import { connectToDatabase } from "../util/mongodb";
 import { connectDB } from "../util/connectDB";
+// import { connect } from "react-redux";
 
-export default function Home() {
+const Home = ({ res }) => {
   const icon = "../assets/favicon/favicon.ico";
   return (
     <div className={styles.container}>
@@ -24,13 +25,17 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
 
 export async function getServerSideProps(context) {
-  await connectDB();
+  console.log("typeof ", typeof connectDB);
+  const res = await connectDB();
+
   // const { client } = await connectToDatabase();
   // const isConnected = await client.isConnected();
   return {
     props: {},
   };
 }
+
+export default Home;

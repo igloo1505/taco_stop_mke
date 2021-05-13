@@ -26,10 +26,6 @@ class MyDocument extends Document {
             integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
             crossorigin="anonymous"
           ></script>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1"
-          ></meta>
         </Head>
         <body>
           <Main />

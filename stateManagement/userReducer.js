@@ -5,7 +5,7 @@ import {
 } from "./Types";
 
 const initialState = {
-  loggedIn: false,
+  loggedIn: true,
   token: () => {
     if (typeof window !== "undefined") {
       return window.localStorage.getItem("token");
@@ -14,7 +14,10 @@ const initialState = {
     }
   },
   loading: false,
-  user: null,
+  user: {
+    token: 1,
+    id: null,
+  },
   error: null,
 };
 
@@ -23,18 +26,24 @@ export default function userReducer(state = initialState, action) {
     case AUTHENTICATE_USER:
       return {
         ...state,
+        loggedIn: true,
         loading: false,
-        user: action.payload,
+        user: {
+          token: action.payload.token,
+          id: action.payload.userID,
+        },
       };
     case REGISTER_NEW_USER:
       return {
         ...state,
+        loggedIn: true,
         loading: false,
         user: action.payload,
       };
     case AUTHENTICATION_ERROR:
       return {
         ...state,
+        loggedIn: false,
         loading: false,
         error: action.payload,
       };

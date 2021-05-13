@@ -1,0 +1,9 @@
+.portalAuthenticatedOuterWrapper{
+    display: grid;
+    width: 100%;
+    grid-template-columns: auto 1fr 2fr;
+    grid-template-areas: "leftTab portalForm portalCardDisplay";
+}
+.portalLeftTab{
+    grid-area: "leftTab";
+}

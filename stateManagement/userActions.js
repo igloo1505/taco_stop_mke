@@ -13,7 +13,7 @@ const config = {
 
 export const authenticateUser = (user) => async (dispatch) => {
   try {
-    const res = await axios.post("/api/portal", user, config);
+    const res = await axios.post("/api/portal/login", user, config);
     dispatch({
       type: AUTHENTICATE_USER,
       payload: res.data,

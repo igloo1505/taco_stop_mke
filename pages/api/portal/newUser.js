@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 // const User = require("../../../models/User");
 import nc from "next-connect";
-import middleware from "../../../util/connectDB";
+import middleware, { connectDB } from "../../../util/connectDB";
 // import User from "../../../models/User";
 // import User from "../../../models/User";
 const User = require("../../../models/User");
@@ -30,4 +30,4 @@ handler.post(async (req, res) => {
   }
 });
 
-export default handler;
+export default connectDB(handler);

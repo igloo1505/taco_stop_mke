@@ -7,19 +7,20 @@ const PortalLogin = ({ userState, props, authenticateUser, addNewUser }) => {
   const [user, setUser] = useState({});
   const handlePortalLogin = async () => {
     // authenticateUser(user);
-    addNewUser(user);
+    // addNewUser(user);
+    authenticateUser(user);
   };
   return (
     <div className={styles.PortalLoginContainer}>
       <div className={styles.portalLoginCard}>
         <form>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">
+          <div className="mb-3">
+            <label for="exampleInputEmail1" className="form-label">
               Username
             </label>
             <input
               type="email"
-              class="form-control"
+              className="form-control"
               id="portalLoginEmail"
               aria-describedby="emailHelp"
               onChange={(e) => {
@@ -30,13 +31,13 @@ const PortalLogin = ({ userState, props, authenticateUser, addNewUser }) => {
               }}
             />
           </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">
+          <div className="mb-3">
+            <label for="exampleInputEmail1" className="form-label">
               Password
             </label>
             <input
               type="password"
-              class="form-control"
+              className="form-control"
               id="portalLoginPassword"
               aria-describedby="emailHelp"
               onChange={(e) => {
@@ -49,7 +50,7 @@ const PortalLogin = ({ userState, props, authenticateUser, addNewUser }) => {
           </div>
           <button
             type="button"
-            class="btn btn-primary"
+            className="btn btn-primary"
             style={{ width: "100%" }}
             onClick={() => handlePortalLogin()}
           >
