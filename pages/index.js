@@ -1,6 +1,8 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
+import { connectToDatabase } from "../util/mongodb";
+import { connectDB } from "../util/connectDB";
 
 export default function Home() {
   const icon = "../assets/favicon/favicon.ico";
@@ -22,4 +24,13 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  await connectDB();
+  // const { client } = await connectToDatabase();
+  // const isConnected = await client.isConnected();
+  return {
+    props: {},
+  };
 }

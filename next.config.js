@@ -7,5 +7,7 @@ module.exports = {
   env: {
     MONGO_URI:
       "mongodb+srv://tacoStopMKE:TacoStopMilwaukee@development.bo7q9.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    JWT_SECRET: "ShhThisIsASecret",
+    MONGODB_DB: "development",
   },
 };

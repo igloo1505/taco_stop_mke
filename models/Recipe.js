@@ -1,10 +1,5 @@
 const mongoose = require("mongoose");
-const categoryArray = [
-    "speciality",
-    "side",
-    "drink",
-    "tacoIngredients"
-];
+const categoryArray = ["speciality", "side", "drink", "tacoIngredients"];
 
 const RecipeSchema = mongoose.Schema(
   {
@@ -36,14 +31,13 @@ const RecipeSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-RecipeSchema.pre("save", async (next, done) {
-    if(!categoryArray.includes(this.category)){
-        var err = new Error("category is not valid")
-        next(err)
-    }
-    else {
-        next()
-    }
-})
+RecipeSchema.pre("save", async function (next, done) {
+  if (!categoryArray.includes(this.category)) {
+    var err = new Error("category is not valid");
+    next(err);
+  } else {
+    next();
+  }
+});
 
 module.exports = mongoose.model("Recipe", RecipeSchema);
