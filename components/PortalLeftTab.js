@@ -1,7 +1,20 @@
 import React from "react";
 import styles from "../styles/PortalLeftTab.module.scss";
-const portalLeftTab = ({ category }) => {
-  return <div className={styles.portalLeftTab}>{category}</div>;
+import { connect } from "react-redux";
+const portalLeftTab = ({ category, setSelectedCategory }) => {
+  return (
+    <div
+      className={styles.portalLeftTab}
+      onClick={() => setSelectedCategory(`${category}`)}
+    >
+      {category}
+    </div>
+  );
 };
 
-export default portalLeftTab;
+const mapStateToProps = (state, props) => ({
+  user: state.user,
+  props: props,
+});
+
+export default connect(mapStateToProps)(portalLeftTab);
