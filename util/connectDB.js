@@ -3,10 +3,12 @@ const nc = require("next-connect");
 import authMiddleware from "./authMiddleware";
 const colors = require("colors");
 
-const connectDB = (handler) => async (req, res) => {
+const connectDB = (handler, isProtected) => async (req, res) => {
   console.log(colors.bgCyan.black("Running connectDB()"));
   if (mongoose.connections[0].readyState) {
-    // Use current db connection
+    if (isProtected) {
+      await authMiddleware(req, res);
+    }
     return handler(req, res);
   }
   await mongoose
@@ -16,14 +18,31 @@ const connectDB = (handler) => async (req, res) => {
       useFindAndModify: false,
       useUnifiedTopology: true,
     })
-    .then(() => {
+    .then(async () => {
+      if (isProtected) {
+        await authMiddleware(req, res);
+      }
       return handler(req, res);
     });
 };
 
 const middleware = nc();
+// const middlewareWithAuth = nc();
+// console.log("MIDDLEWARE", middleware);
 // middleware.use(database);
-middleware.use(connectDB);
+// middlewareWithAuth.use(async (req, res, next) => {
+//   // await authMiddleware();
+//   next();
+// });
+// middlewareWithAuth.use(async (req, res, next) => {
+//   connectDB();
+//   next();
+// });
+middleware.use(async (req, res, next) => {
+  connectDB();
+  next();
+});
+
 // middleware.use(authMiddleware);
 module.exports = {
   connectDB,

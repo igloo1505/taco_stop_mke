@@ -26,6 +26,7 @@ const FormInput = ({ k, setFormData, formData, selected }) => {
             className="form-control"
             id={k.display}
             aria-describedby="emailHelp"
+            value={formData[selected.name][k.display]}
             onChange={(e) => handleChange(e.target.value)}
           />
         </div>
@@ -41,6 +42,7 @@ const FormInput = ({ k, setFormData, formData, selected }) => {
             className="form-control"
             id={k.display}
             aria-describedby="emailHelp"
+            value={formData[selected.name][k.display]}
             onChange={(e) => handleChange(e.target.value)}
           />
         </div>
@@ -52,6 +54,7 @@ const FormInput = ({ k, setFormData, formData, selected }) => {
             type="checkbox"
             className="form-check-input"
             id={k.display}
+            value={formData[selected.name][k.display]}
             onChange={(e) => {
               handleChange(!booleanToggle);
               setBooleanToggle(!booleanToggle);
@@ -73,6 +76,7 @@ const FormInput = ({ k, setFormData, formData, selected }) => {
             className="form-select form-select-sm"
             aria-label="Category"
             id={k.display}
+            value={formData[selected.name][k.display]}
             onChange={(e) => handleChange(e.target.value)}
           >
             <option selected>{k.display}</option>
@@ -93,6 +97,7 @@ const FormInput = ({ k, setFormData, formData, selected }) => {
             className="form-control"
             id={k.display}
             aria-describedby="emailHelp"
+            value={formData[selected.name][k.display]}
             onChange={(e) => handleChange(e.target.value)}
           />
         </div>

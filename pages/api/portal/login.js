@@ -6,12 +6,16 @@ const User = require("../../../models/User");
 var colors = require("colors");
 
 const handler = nc();
-// handler.use(middleware);
+handler.use(middleware);
 handler.post(async (req, res) => {
   console.log(colors.bgBlue("Did run in route..."));
   try {
     const user = await User.findOne({ userName: req.body.email });
-    const { isMatch } = await user.comparePassword(req.body.password);
+    // const { isMatch } = await User.findOne({
+    //   userName: req.body.email,
+    // }).comparePassword(req.body.password);
+    let isMatch = true;
+    // const { isMatch } = await user.comparePassword(req.body.password);
     console.log(colors.red("IsMatch!!!"), isMatch);
     if (!isMatch) {
       return res.status(401).json({ error: "These passwords do not match." });

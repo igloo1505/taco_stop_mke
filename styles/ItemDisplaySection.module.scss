@@ -1,0 +1,16 @@
+.itemDisplaySectionWrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cardButtonContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 0px;
+    margin-top: auto;
+}
+.cardUserNameText{
+    font-size: 1.2rem;
+}

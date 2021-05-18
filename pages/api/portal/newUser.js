@@ -1,29 +1,33 @@
 const mongoose = require("mongoose");
-// const User = require("../../../models/User");
 import nc from "next-connect";
-import middleware, { connectDB } from "../../../util/connectDB";
-// import User from "../../../models/User";
-// import User from "../../../models/User";
+import { connectDB, middleware } from "../../../util/connectDB";
+import jwt from "jsonwebtoken";
 const User = require("../../../models/User");
+const colors = require("colors");
 
 const handler = nc();
 handler.use(middleware);
 handler.post(async (req, res) => {
-  console.log("Reached backend with: ", req.body);
+  console.log(colors.red("Reached backend with: "), req.body);
   try {
+    console.log(colors.red("Reached backend with: "), req.body);
+    console.log("FIrstname?", req.body["First Name"]);
     let user = new User({
-      userName: req.body.email,
-      password: req.body.password,
+      userName: req.body.Username,
+      password: req.body.Password,
+      firstName: req.body["First Name"],
+      lastName: req.body["Last Name"],
     });
-    // let user = {
-    //   username: req.body.email,
-    //   password: req.body.password,
-    // };
+
     console.log("USER!!!", user);
     // const newUser = user;
     const newUser = await user.save();
-    console.log("User Saved!!: ", user);
-    res.json(newUser);
+    // console.log("User Saved!!: ", user);
+    let token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET);
+    res.json({
+      ...newUser,
+      token: token,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "There was an error adding that user." });

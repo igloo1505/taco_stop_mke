@@ -6,6 +6,7 @@ const portalLeftTab = ({ category, setSelectedCategory }) => {
     <div
       className={styles.portalLeftTab}
       onClick={() => setSelectedCategory(`${category}`)}
+      key={category}
     >
       {category}
     </div>

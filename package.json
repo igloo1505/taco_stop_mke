@@ -6,10 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "dev:worker": "wait-on .next/server/worker.js && dotenv -c -- nodemon .next/server/worker.js -w src/server -w src/shared"
+    "dev:worker": "wait-on .next/server/worker.js && dotenv -c -- nodemon .next/server/worker.js -w src/server -w src/shared",
+    "dev:verbose": "NODE_OPTIONS='--inspect' next dev"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.5.1",
     "bcryptjs": "^2.4.3",
+    "bootstrap": "^4.6.0",
     "colors": "^1.4.0",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
@@ -19,11 +22,13 @@
     "next": "10.2.0",
     "next-connect": "^0.10.1",
     "react": "17.0.2",
+    "react-bootstrap": "^1.6.0",
     "react-dom": "17.0.2",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",
-    "sass": "^1.32.12"
+    "sass": "^1.32.12",
+    "styled-jsx": "^3.3.2"
   },
   "devDependencies": {
     "redux-devtools-extension": "^2.13.9",
