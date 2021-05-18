@@ -5,9 +5,18 @@ import FormInput from "./FormInput";
 import { data, submissionHandler } from "./dataForForm";
 import { connect } from "react-redux";
 import { addNewUser, getAllUsers } from "../stateManagement/userActions";
+import { toggleLeftTab } from "../stateManagement/uiActions";
 import ItemDisplaySection from "./cmsItemSection/ItemDisplaySection";
-
-const PortalAuthenticated = ({ user, props: { toggleModal }, addNewUser }) => {
+import { FcNext } from "react-icons/fc";
+const PortalAuthenticated = ({
+  user,
+  UI: {
+    leftTab: { isOpen },
+  },
+  props: { toggleModal },
+  addNewUser,
+  toggleLeftTab,
+}) => {
   const [selected, setSelected] = useState(data.categories[0]);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -33,6 +42,7 @@ const PortalAuthenticated = ({ user, props: { toggleModal }, addNewUser }) => {
 
   useEffect(() => {
     console.log("Did run in useEffect");
+    console.log("isOpen", isOpen);
     setData();
   }, [selected.name, user]);
 
@@ -65,13 +75,32 @@ const PortalAuthenticated = ({ user, props: { toggleModal }, addNewUser }) => {
 
   return (
     <div className={styles.portalAuthenticatedOuterWrapper}>
-      <div className={styles.portalLeftTab}>
-        {data.categories.map((c) => (
-          <PortalLeftTab
-            category={c.name}
-            setSelectedCategory={setSelectedCategory}
-          />
-        ))}
+      <div
+        className={
+          isOpen ? "portalLeftTabWrapper" : "portalLeftTabWrapper closed"
+        }
+      >
+        <FcNext
+          onClick={toggleLeftTab}
+          className={
+            isOpen ? "leftTabToggleIcon" : "leftTabToggleIcon rotatedIcon"
+          }
+        />
+        <div
+          className={
+            isOpen
+              ? "portalLeftTabInnerWrapper"
+              : "portalLeftTabInnerWrapper leftTabPanelClosed"
+          }
+        >
+          {data.categories.map((c) => (
+            <PortalLeftTab
+              category={c.name}
+              isOpen={isOpen}
+              setSelectedCategory={setSelectedCategory}
+            />
+          ))}
+        </div>
       </div>
       <div className={styles.formWrapper}>
         <form>
@@ -95,13 +124,44 @@ const PortalAuthenticated = ({ user, props: { toggleModal }, addNewUser }) => {
         </form>
       </div>
       <ItemDisplaySection dataArray={dataArray} selected={selected} />
+      <style jsx global>
+        {`
+          .leftTabToggleIcon {
+            font-size: 1.8rem;
+            transform: rotateY(180deg);
+            transition: transform 0.3s ease-in-out;
+            border-radius: 5px;
+            margin: 0.5rem;
+          }
+          .rotatedIcon {
+            transform: rotateY(0deg);
+          }
+          .portalLeftTabWrapper {
+            transition: width 0.5s ease-in-out;
+          }
+          .portalLeftTabWrapper.closed {
+            width: 40px;
+            transition: width 0.5s ease-in-out;
+          }
+          .portalLeftTabInnerWrapper {
+            transform: translateX(0);
+            transition: transform 0.3s ease-in-out;
+          }
+          .leftTabPanelClosed {
+            transform: translateX(-100%);
+          }
+        `}
+      </style>
     </div>
   );
 };
 
 const mapStateToProps = (state, props) => ({
   user: state.user,
+  UI: state.UI,
   props: props,
 });
 
-export default connect(mapStateToProps, { addNewUser })(PortalAuthenticated);
+export default connect(mapStateToProps, { addNewUser, toggleLeftTab })(
+  PortalAuthenticated
+);

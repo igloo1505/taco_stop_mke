@@ -5,10 +5,10 @@ import {
   REGISTER_NEW_USER,
   GET_ALL_USERS,
   USER_ERROR,
-  USER_ERROR_WITH_MODAL,
+  USER_ERROR_WITH_DIALOGUE,
   REMOVE_USER,
-} from "./Types";
-
+  ERROR_WITH_MODAL,
+} from "./TYPES";
 let Modal;
 import colors from "colors";
 import axios from "axios";
@@ -36,36 +36,26 @@ export const authenticateUser = (user) => async (dispatch) => {
 export const addNewUser = (user) => async (dispatch) => {
   try {
     const res = await axios.post("/api/portal/newUser", user, config);
-    console.log("res from newUser action", res);
     dispatch({
       type: REGISTER_NEW_USER,
       payload: res.data,
     });
-    // return true;
   } catch (error) {
     dispatch({
-      type: USER_ERROR_WITH_MODAL,
-      payload: {
-        error,
-        modalText: "Something went wrong while adding that user.",
-        modalHeader: "Error",
-        isConfirmation: false,
-      },
+      type: ERROR_WITH_MODAL,
+      payload: error,
     });
-    // return false;
   }
 };
 
 export const getAllUsers = () => async (dispatch) => {
   try {
     const res = await axios.get("/api/portal/", config);
-    console.log("res", res.data, typeof dispatch);
     dispatch({
       type: GET_ALL_USERS,
       payload: res.data,
     });
   } catch (error) {
-    console.log("Got by ID", modal);
     dispatch({
       type: USER_ERROR,
       payload: error,
@@ -76,7 +66,7 @@ export const getAllUsers = () => async (dispatch) => {
 export const removeUser = (userID) => async (dispatch) => {
   try {
     // const res = await axios.post("/api/portal/removeUser/", userID, config);
-    const res = await axios.get("/api/poral/removeUser", config);
+    const res = await axios.get("/api/portal/removeUser", config);
     dispatch({
       type: REMOVE_USER,
       payload: res.data,

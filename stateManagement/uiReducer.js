@@ -3,7 +3,9 @@ import {
   SET_MODAL_CONTENT,
   MODAL_CONFIRMED,
   MODAL_DISMISSED,
-  USER_ERROR_WITH_MODAL,
+  USER_ERROR_WITH_DIALOGUE,
+  ERROR_WITH_MODAL,
+  TOGGLE_LEFT_TAB,
 } from "./TYPES";
 
 const initialState = {
@@ -11,6 +13,9 @@ const initialState = {
     modalText: "",
     modalHeader: "",
     isConfirmation: false,
+  },
+  leftTab: {
+    isOpen: true,
   },
   errors: [],
 };
@@ -25,8 +30,24 @@ export default function modalReducer(state = initialState, action) {
           modalHeader: action.payload.modalHeader,
           isConfirmation: action.payload.isConfirmation || false,
         },
+        leftTab: { ...state.leftTab },
       };
-    case USER_ERROR_WITH_MODAL:
+    case TOGGLE_LEFT_TAB:
+      return {
+        ...state,
+        modal: { ...state.modal },
+        leftTab: {
+          isOpen: !state.leftTab.isOpen,
+        },
+      };
+    case ERROR_WITH_MODAL:
+      action = {
+        payload: {
+          modalHeader: "Header",
+          modalText: "Text goes here",
+          isConfirmation: false,
+        },
+      };
       return {
         ...state,
         modal: {
@@ -34,7 +55,9 @@ export default function modalReducer(state = initialState, action) {
           modalHeader: action.payload.modalHeader,
           isConfirmation: action.payload.isConfirmation,
         },
+        leftTab: { ...state.leftTab },
       };
+
     default:
       return state;
   }

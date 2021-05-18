@@ -4,8 +4,8 @@ import {
   REGISTER_NEW_USER,
   GET_ALL_USERS,
   USER_ERROR,
-  USER_ERROR_WITH_MODAL,
-} from "./Types";
+  ERROR_WITH_MODAL,
+} from "./TYPES";
 
 const initialState = {
   loggedIn: true,
@@ -73,7 +73,7 @@ export default function userReducer(state = initialState, action) {
         user: { ...state.user },
         error: action.payload,
       };
-    case USER_ERROR_WITH_MODAL:
+    case ERROR_WITH_MODAL:
       return {
         ...state,
         // loggedIn: false,
