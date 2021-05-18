@@ -5,6 +5,8 @@ import {
   GET_ALL_USERS,
   USER_ERROR,
   ERROR_WITH_MODAL,
+  REMOVE_USER,
+  RETURN_SINGLE_ITEM,
 } from "./TYPES";
 
 const initialState = {
@@ -17,6 +19,7 @@ const initialState = {
     }
   },
   allUsers: [],
+  filtered: null,
   loading: false,
   user: {
     token: 1,
@@ -40,11 +43,25 @@ export default function userReducer(state = initialState, action) {
         },
       };
 
+    case RETURN_SINGLE_ITEM:
+      return {
+        ...state,
+        user: { ...state.user },
+        filtered: state.allUsers.filter((u) => u._id === action.payload._id),
+      };
     case GET_ALL_USERS:
       return {
         ...state,
         user: { ...state.user },
         allUsers: action.payload.user,
+      };
+    case REMOVE_USER:
+      return {
+        ...state,
+        user: { ...state.user },
+        allUsers: state.allUsers.filter(
+          (u) => u._id !== action.payload.user._id
+        ),
       };
     case USER_ERROR:
       return {
@@ -77,10 +94,10 @@ export default function userReducer(state = initialState, action) {
       return {
         ...state,
         // loggedIn: false,
-        allUsers: [],
+        // allUsers: [],
         loading: false,
         user: { ...state.user },
-        error: action.payload,
+        error: action.payload.error,
       };
     default:
       return state;

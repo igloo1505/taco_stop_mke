@@ -7,11 +7,11 @@ const colors = require("colors");
 const handler = nc();
 handler.use(middleware);
 handler.post(async (req, res) => {
-  console.log(req.body);
   try {
-    return res.json({ msg: "Reached portal removeUser route success" });
+    const user = await User.findByIdAndDelete(req.body.userID);
+    return res.json({ user });
   } catch (error) {
-    return res.json({ msg: "Reached portal removeUser route catch block" });
+    return res.json({ msg: "There was an error removing that user." });
   }
 });
 

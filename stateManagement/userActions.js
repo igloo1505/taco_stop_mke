@@ -40,11 +40,20 @@ export const addNewUser = (user) => async (dispatch) => {
       type: REGISTER_NEW_USER,
       payload: res.data,
     });
+    return true;
   } catch (error) {
     dispatch({
       type: ERROR_WITH_MODAL,
-      payload: error,
+      payload: {
+        error,
+        modalText:
+          "There was an error adding that user. Check to make sure that 'username' is available.",
+        modalHeader: "Server Error",
+        isConfirmation: false,
+        isOpen: true,
+      },
     });
+    return false;
   }
 };
 
@@ -65,8 +74,7 @@ export const getAllUsers = () => async (dispatch) => {
 
 export const removeUser = (userID) => async (dispatch) => {
   try {
-    // const res = await axios.post("/api/portal/removeUser/", userID, config);
-    const res = await axios.get("/api/portal/removeUser", config);
+    const res = await axios.post("/api/portal/removeUser/", userID, config);
     dispatch({
       type: REMOVE_USER,
       payload: res.data,

@@ -6,6 +6,7 @@ import {
   USER_ERROR_WITH_DIALOGUE,
   ERROR_WITH_MODAL,
   TOGGLE_LEFT_TAB,
+  TOGGLE_EDIT_STATE,
 } from "./TYPES";
 
 const initialState = {
@@ -13,10 +14,12 @@ const initialState = {
     modalText: "",
     modalHeader: "",
     isConfirmation: false,
+    isOpen: false,
   },
   leftTab: {
     isOpen: true,
   },
+  isEditing: false,
   errors: [],
 };
 
@@ -32,6 +35,13 @@ export default function modalReducer(state = initialState, action) {
         },
         leftTab: { ...state.leftTab },
       };
+    case TOGGLE_EDIT_STATE:
+      return {
+        ...state,
+        modal: { ...state.modal },
+        letTab: { ...state.leftTab },
+        isEditing: !state.isEditing,
+      };
     case TOGGLE_LEFT_TAB:
       return {
         ...state,
@@ -40,20 +50,21 @@ export default function modalReducer(state = initialState, action) {
           isOpen: !state.leftTab.isOpen,
         },
       };
-    case ERROR_WITH_MODAL:
-      action = {
-        payload: {
-          modalHeader: "Header",
-          modalText: "Text goes here",
-          isConfirmation: false,
-        },
+    case TOGGLE_MODAL:
+      return {
+        ...state,
+        modal: { ...state.modal, isOpen: !state.modal.isOpen },
+        leftTab: { ...state.leftTab },
       };
+    case ERROR_WITH_MODAL:
       return {
         ...state,
         modal: {
+          ...state.modal,
           modalText: action.payload.modalText,
           modalHeader: action.payload.modalHeader,
           isConfirmation: action.payload.isConfirmation,
+          isOpen: action.payload.isOpen,
         },
         leftTab: { ...state.leftTab },
       };

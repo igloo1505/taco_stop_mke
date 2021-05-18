@@ -2,9 +2,25 @@ import React from "react";
 import styles from "../../styles/ItemDisplaySection.module.scss";
 import { removeUser } from "../../stateManagement/userActions";
 import { connect } from "react-redux";
-
-const UserItem = ({ props: { item }, removeUser }) => {
+const UserItem = ({
+  user: { allUsers },
+  UI: { isEditing },
+  props: { item, handleEditState },
+  removeUser,
+}) => {
   const { userName, firstName, lastName, createAt, updatedAt, _id } = item;
+
+  const handleDeleteUser = () => {
+    //   TODO Add confirmation Modal here before deleting
+    console.log("Add confirmation modal here!");
+    removeUser({ userID: _id });
+  };
+
+  const handleEditStateChange = () => {
+    let selected = allUsers.filter((user) => user._id === _id);
+    handleEditState(selected[0]);
+  };
+
   return (
     <div className="card bg-light">
       <div className={styles.cardUserNameText}>{userName}</div>
@@ -15,14 +31,16 @@ const UserItem = ({ props: { item }, removeUser }) => {
         <button
           type="button"
           className="btn btn-outline-warning"
-          style={{ marginRight: "5px" }}
+          style={isEditing ? { display: "none" } : { marginRight: "5px" }}
+          onClick={handleEditStateChange}
         >
           Edit
         </button>
         <button
           type="button"
           className="btn btn-outline-danger"
-          style={{ marginLeft: "5px" }}
+          style={isEditing ? { display: "none" } : { marginLeft: "5px" }}
+          onClick={handleDeleteUser}
         >
           Delete
         </button>
@@ -49,6 +67,7 @@ const UserItem = ({ props: { item }, removeUser }) => {
 
 const mapStateToProps = (state, props) => ({
   user: state.user,
+  UI: state.UI,
   props: props,
 });
 

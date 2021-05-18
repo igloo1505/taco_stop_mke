@@ -3,13 +3,20 @@ import { connect } from "react-redux";
 import UserItem from "./UserItem";
 import styles from "../../styles/ItemDisplaySection.module.scss";
 
-const ItemDisplaySection = ({ user, props: { dataArray, selected } }) => {
+const ItemDisplaySection = ({
+  user,
+  props: { dataArray, selected, handleEditState },
+}) => {
   switch (selected.name) {
     case "User":
       return (
         <div className={styles.itemDisplaySectionWrapper}>
           {dataArray.map((item) => (
-            <UserItem item={item} key={item._id} />
+            <UserItem
+              item={item}
+              key={item._id}
+              handleEditState={handleEditState}
+            />
           ))}
         </div>
       );

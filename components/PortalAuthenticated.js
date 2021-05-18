@@ -8,18 +8,26 @@ import { addNewUser, getAllUsers } from "../stateManagement/userActions";
 import { toggleLeftTab } from "../stateManagement/uiActions";
 import ItemDisplaySection from "./cmsItemSection/ItemDisplaySection";
 import { FcNext } from "react-icons/fc";
+import {
+  RETURN_SINGLE_ITEM,
+  TOGGLE_EDIT_STATE,
+} from "../stateManagement/TYPES";
+import { useDispatch } from "react-redux";
+
 const PortalAuthenticated = ({
   user,
   UI: {
     leftTab: { isOpen },
+    isEditing,
   },
   props: { toggleModal },
   addNewUser,
   toggleLeftTab,
 }) => {
+  const dispatch = useDispatch();
   const [selected, setSelected] = useState(data.categories[0]);
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
+  const [selectedItem, setSelectedItem] = useState({});
+  const initialFormData = {
     User: {
       ["First Name"]: "",
       ["Last Name"]: "",
@@ -28,27 +36,64 @@ const PortalAuthenticated = ({
       ["Confirm Password"]: "",
     },
     Recipes: { ["In Stock"]: false, ["Gluten Free"]: false, ["Spicy"]: false },
-  });
+  };
+  const [formData, setFormData] = useState(initialFormData);
   const [dataArray, setDataArray] = useState([]);
 
   const setData = () => {
-    switch (selected.name) {
-      case "User":
+    if (selected.name === "User") {
+      if (isEditing) {
+        return setDataArray(user.filtered);
+      } else {
         return setDataArray(user.allUsers);
-      default:
-        return setDataArray([]);
+      }
+    }
+    if (selected.name === "Recipes") {
+      setDataArray([]);
     }
   };
 
+  const handleEditState = (obj) => {
+    console.log("Did trigger edit state function with: ", obj);
+    setSelectedItem(obj ? obj : {});
+    if (selected.name === "User") {
+      dispatch({
+        type: RETURN_SINGLE_ITEM,
+        payload: { _id: obj._id },
+      });
+      // setIsEditing(!isEditing);
+      dispatch({ type: TOGGLE_EDIT_STATE });
+      setFormData({
+        Recipes: { ...formData.Recipes },
+        User: {
+          ["First Name"]: obj.firstName,
+          ["Last Name"]: obj.lastName,
+          Username: obj.userName,
+          Password: obj.password,
+          ["Confirm Password"]: "",
+        },
+      });
+    }
+  };
+
+  const cancelEditState = () => {
+    dispatch({
+      type: TOGGLE_EDIT_STATE,
+    });
+    setFormData(initialFormData);
+  };
+
   useEffect(() => {
-    console.log("Did run in useEffect");
-    console.log("isOpen", isOpen);
     setData();
-  }, [selected.name, user]);
+  }, [selected.name, user, isEditing]);
 
   const setSelectedCategory = (category) => {
     let filtered = data.categories.filter((d) => d.name === category);
     // setFormData({});
+    // setIsEditing(false);
+    if (isEditing === true) {
+      dispatch({ type: TOGGLE_EDIT_STATE });
+    }
     setSelected(filtered[0]);
   };
   const handleSubmission = async (e) => {
@@ -113,17 +158,31 @@ const PortalAuthenticated = ({
               selected={selected}
             />
           ))}
-          <button
-            type="button"
-            class="btn btn-primary"
-            style={{ float: "right" }}
-            onClick={(e) => handleSubmission(e)}
-          >
-            Submit
-          </button>
+          <div class="d-grid gap-2">
+            <button
+              type="button"
+              class="btn btn-warning"
+              onClick={(e) => cancelEditState(e)}
+              style={isEditing ? { display: "block" } : { display: "none" }}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              style={{ float: "right" }}
+              onClick={(e) => handleSubmission(e)}
+            >
+              {isEditing ? "Edit" : "Submit"}
+            </button>
+          </div>
         </form>
       </div>
-      <ItemDisplaySection dataArray={dataArray} selected={selected} />
+      <ItemDisplaySection
+        dataArray={dataArray}
+        selected={selected}
+        handleEditState={handleEditState}
+      />
       <style jsx global>
         {`
           .leftTabToggleIcon {

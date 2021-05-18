@@ -4,14 +4,14 @@ import {
   MODAL_CONFIRMED,
   MODAL_DISMISSED,
   TOGGLE_LEFT_TAB,
+  TOGGLE_EDIT_STATE,
 } from "./TYPES";
 
-export const toggleModal = () => {
+export const toggleModal = () => (dispatch) => {
   if (typeof window !== "undefined") {
-    Modal = require("../util/js/dist/modal");
-    console.log(Modal);
-    const modal = new Modal(document.getElementById("portalModal"));
-    modal.toggle();
+    dispatch({
+      type: TOGGLE_MODAL,
+    });
   }
 };
 
