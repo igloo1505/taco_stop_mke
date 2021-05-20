@@ -8,6 +8,7 @@ import {
   USER_ERROR_WITH_DIALOGUE,
   REMOVE_USER,
   ERROR_WITH_MODAL,
+  UPDATE_USER_INFO,
 } from "./TYPES";
 let Modal;
 import colors from "colors";
@@ -85,4 +86,21 @@ export const removeUser = (userID) => async (dispatch) => {
       payload: error,
     });
   }
+};
+
+export const updateUserInfo = (user) => async (dispatch) => {
+  try {
+    const res = await axios.post("api/portal/updateUserInfo", user, config);
+    dispatch({
+      type: UPDATE_USER_INFO,
+      payload: res.data,
+    });
+    return true;
+  } catch (error) {
+    dispatch({
+      type: USER_ERROR,
+      payload: error,
+    });
+  }
+  return false;
 };

@@ -7,6 +7,7 @@ import {
   ERROR_WITH_MODAL,
   REMOVE_USER,
   RETURN_SINGLE_ITEM,
+  UPDATE_USER_INFO,
 } from "./TYPES";
 
 const initialState = {
@@ -54,6 +55,16 @@ export default function userReducer(state = initialState, action) {
         ...state,
         user: { ...state.user },
         allUsers: action.payload.user,
+      };
+    case UPDATE_USER_INFO:
+      const filteredUsers = state.allUsers.filter(
+        (u) => u._id !== action.payload._id
+      );
+      filteredUsers.push(action.payload);
+      return {
+        ...state,
+        user: { ...state.user },
+        allUsers: filteredUsers,
       };
     case REMOVE_USER:
       return {

@@ -6,7 +6,8 @@ import {
   ADD_MENU_ITEM,
   REMOVE_MENU_ITEM,
   EDIT_MENU_ITEM,
-} from "./Types";
+  RETURN_SINGLE_RECIPE,
+} from "./TYPES";
 
 const initialState = {
   token: () => {
@@ -17,7 +18,8 @@ const initialState = {
     }
   },
   loading: false,
-  recipes: [],
+  allRecipes: [],
+  filtered: null,
   error: null,
 };
 
@@ -31,10 +33,21 @@ const recipeReducer = (state = initialState, action) => {
     case ADD_MENU_ITEM:
       return {
         ...state,
-        recipes: [...state.recipes, action.payload],
+        allRecipes: [...state.allRecipes, action.payload],
         loading: false,
       };
 
+    case RETURN_SINGLE_RECIPE:
+      return {
+        ...state,
+        filtered: state.allRecipes.filter((r) => r._id === action.payload._id),
+      };
+    case GET_RECIPES:
+      return {
+        ...state,
+        allRecipes: action.payload,
+        loading: false,
+      };
     default:
       return state;
   }

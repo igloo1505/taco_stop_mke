@@ -1,31 +1,56 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { toggleModal } from "../stateManagement/uiActions";
-let Modal;
+import {
+  MODAL_DISMISSED,
+  MODAL_CONFIRMED,
+  SET_MODAL_INSTANCE,
+  TOGGLE_MODAL,
+} from "../stateManagement/TYPES";
+
 const ModalWithConfirmation = ({
   modal: { modalText, modalHeader, isConfirmation, isOpen },
+  UI: { isEditing },
   toggleModal,
 }) => {
-  const [isFirstOpen, setIsFirstOpen] = useState(true);
+  const dispatch = useDispatch();
+  const [isFirstRender, setIsFirstRender] = useState(true);
+  const [modalInstance, setModalInstance] = useState(null);
   useEffect(() => {
     handleModalOpenState();
   }, [isOpen]);
-  let instance;
-  if (typeof window !== "undefined") {
-    Modal = require("../util/js/dist/modal");
-    instance = new Modal(document.getElementById("portalModal"));
-  }
+
   const handleModalOpenState = () => {
     if (typeof window !== "undefined") {
+      let em = document.getElementById("portalModal");
+      let initialInstance = new bootstrap.Modal(em);
+      if (initialInstance && isFirstRender) {
+        setModalInstance(initialInstance);
+        setIsFirstRender(false);
+      }
+      let instance = bootstrap.Modal.getInstance(
+        window.document.getElementById("portalModal")
+      );
       if (isOpen) {
-        console.log("Showing...");
-        instance.show();
+        modalInstance ? modalInstance.show() : instance.show();
       }
       if (!isOpen) {
-        console.log("Hiding...", instance);
-        instance.hide();
+        modalInstance ? modalInstance.hide() : instance.hide();
       }
     }
+  };
+
+  const dispatchFromModalConfirmation = (isConfirmed) => {
+    // if (!isConfirmation) {
+    //   dispatch({ type: TOGGLE_MODAL });
+    // }
+    // isConfirmed
+    //   ? dispatch({
+    //       type: MODAL_CONFIRMED,
+    //     })
+    //   : dispatch({
+    //       type: MODAL_DISMISSED,
+    //     });
   };
 
   return (
@@ -47,8 +72,9 @@ const ModalWithConfirmation = ({
             <button
               type="button"
               class="btn-close"
-              data-bs-dismiss="modal"
               aria-label="Close"
+              id="modalDeniedButtonX"
+              onClick={() => dispatchFromModalConfirmation(false)}
             ></button>
           </div>
           <div class="modal-body">{modalText}</div>
@@ -56,8 +82,8 @@ const ModalWithConfirmation = ({
             <button
               type="button"
               class="btn btn-secondary"
-              onClick={toggleModal}
-              data-bs-dismiss="modal"
+              id="modalDeniedButton"
+              onClick={() => dispatchFromModalConfirmation(false)}
             >
               Close
             </button>
@@ -67,6 +93,8 @@ const ModalWithConfirmation = ({
               style={
                 isConfirmation ? { display: "block" } : { display: "none" }
               }
+              id="modalConfirmationButton"
+              onClick={() => dispatchFromModalConfirmation(true)}
             >
               Understood
             </button>
@@ -79,6 +107,7 @@ const ModalWithConfirmation = ({
 
 const mapStateToProps = (state, props) => ({
   modal: state.UI.modal,
+  UI: state.UI,
 });
 
 export default connect(mapStateToProps, { toggleModal })(ModalWithConfirmation);

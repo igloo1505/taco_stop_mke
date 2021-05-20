@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const categoryArray = ["speciality", "side", "drink", "tacoIngredients"];
+const categoryArray = ["specialty", "side", "drink", "tacoIngredients"];
 
 const RecipeSchema = mongoose.Schema(
   {
@@ -27,12 +27,16 @@ const RecipeSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isInStock: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );
 
 RecipeSchema.pre("save", async function (next, done) {
-  if (!categoryArray.includes(this.category)) {
+  if (!categoryArray.includes(this.category.toLowerCase())) {
     var err = new Error("category is not valid");
     next(err);
   } else {
@@ -40,4 +44,6 @@ RecipeSchema.pre("save", async function (next, done) {
   }
 });
 
-module.exports = mongoose.model("Recipe", RecipeSchema);
+// module.exports = mongoose.model("Recipe", RecipeSchema);
+module.exports =
+  mongoose.models.Recipe || mongoose.model("Recipe", RecipeSchema);

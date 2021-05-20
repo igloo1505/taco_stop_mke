@@ -4,7 +4,7 @@ import {
   MODAL_CONFIRMED,
   MODAL_DISMISSED,
   TOGGLE_LEFT_TAB,
-  TOGGLE_EDIT_STATE,
+  SET_MODAL_INSTANCE,
 } from "./TYPES";
 
 export const toggleModal = () => (dispatch) => {
@@ -31,3 +31,10 @@ export const setModalContent =
       payload: { modalHeader, modalText, isConfirmation },
     });
   };
+
+export const setModalInstance = (instance) => (dispatch) => {
+  dispatch({
+    type: SET_MODAL_INSTANCE,
+    payload: instance,
+  });
+};

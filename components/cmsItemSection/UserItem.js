@@ -1,19 +1,66 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "../../styles/ItemDisplaySection.module.scss";
 import { removeUser } from "../../stateManagement/userActions";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
+import {
+  TRIGGER_MODAL,
+  TOGGLE_MODAL,
+  MODAL_CONFIRMED,
+  MODAL_DISMISSED,
+} from "../../stateManagement/TYPES";
+import dayjs from "dayjs";
+import store from "../../stateManagement/store";
+
 const UserItem = ({
   user: { allUsers },
-  UI: { isEditing },
-  props: { item, handleEditState },
+  UI: {
+    isEditing,
+    modal: { isOpen },
+  },
+  props: { item, handleEditState, selectedItem, formData },
   removeUser,
 }) => {
-  const { userName, firstName, lastName, createAt, updatedAt, _id } = item;
+  const { userName, firstName, lastName, createdAt, updatedAt, _id } = item;
+  const dispatch = useDispatch();
 
   const handleDeleteUser = () => {
-    //   TODO Add confirmation Modal here before deleting
-    console.log("Add confirmation modal here!");
-    removeUser({ userID: _id });
+    dispatch({
+      type: TRIGGER_MODAL,
+      payload: {
+        modalText: `Are you sure you want to delete ${userName}?`,
+        modalHeader: "Are you sure?",
+        isConfirmation: true,
+        isOpen: true,
+      },
+    });
+    let confirm = document.getElementById("modalConfirmationButton");
+    let denied = document.getElementById("modalDeniedButton");
+    let deniedX = document.getElementById("modalDeniedButtonX");
+    // if (isOpen) {
+    denied.addEventListener("click", (e) => {
+      dispatch({ type: MODAL_DISMISSED });
+    });
+    deniedX.addEventListener("click", (e) => {
+      dispatch({ type: MODAL_DISMISSED });
+    });
+    confirm.addEventListener("click", (e) => {
+      removeUser({ userID: _id });
+      dispatch({ type: MODAL_CONFIRMED });
+    });
+    // }
+  };
+
+  const dispatchFromModalConfirmation = (isConfirmed) => {
+    if (!isConfirmation) {
+      dispatch({ type: TOGGLE_MODAL });
+    }
+    isConfirmed
+      ? dispatch({
+          type: MODAL_CONFIRMED,
+        })
+      : dispatch({
+          type: MODAL_DISMISSED,
+        });
   };
 
   const handleEditStateChange = () => {
@@ -21,11 +68,23 @@ const UserItem = ({
     handleEditState(selected[0]);
   };
 
+  const isSelectedAndEditing = () => {
+    if (isEditing && selectedItem._id === _id) {
+      return true;
+    } else return false;
+  };
+
   return (
     <div className="card bg-light">
-      <div className={styles.cardUserNameText}>{userName}</div>
+      <div className={styles.cardUserNameText}>
+        {isSelectedAndEditing() ? selectedItem.Username : userName}
+      </div>
       <div className={styles.givenNameText}>
-        {lastName}, {firstName}
+        {isSelectedAndEditing() ? selectedItem["Last Name"] : lastName},{" "}
+        {isSelectedAndEditing() ? selectedItem["First Name"] : firstName}
+      </div>
+      <div className={styles.timeStamp}>
+        Created on: {dayjs(createdAt).format("MM/DD/YYYY")}
       </div>
       <div className={styles.cardButtonContainer}>
         <button

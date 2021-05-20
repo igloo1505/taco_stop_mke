@@ -4,10 +4,11 @@ import PortalLogin from "../components/PortalLogin";
 import PortalAuthenticated from "../components/PortalAuthenticated";
 import { connect } from "react-redux";
 import { getAllUsers } from "../stateManagement/userActions";
+import { getAllRecipes } from "../stateManagement/recipeActions";
 import { GET_ALL_USERS, USER_ERROR } from "../stateManagement/TYPES";
 import axios from "axios";
 import ModalWithConfirmation from "../components/Modal";
-import { current } from "@reduxjs/toolkit";
+import Alert from "../components/Alert";
 
 const portal = ({
   user: {
@@ -15,12 +16,13 @@ const portal = ({
     user: { token, _id, allUsers },
   },
   getAllUsers,
+  getAllRecipes,
 }) => {
   useEffect(async () => {
-    // const something = current();
-    // console.log("Something?", something);
+    await getAllRecipes();
     await getAllUsers();
   }, []);
+
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState({
     modalHeader: "",
@@ -35,6 +37,7 @@ const portal = ({
   };
   return (
     <div className={styles.portalOuterWrapper}>
+      <Alert />
       <ModalWithConfirmation
         modalText={modalContent.modalText}
         modalHeader={modalContent.modalHeader}
@@ -52,4 +55,4 @@ const mapStateToProps = (state, props) => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps, { getAllUsers })(portal);
+export default connect(mapStateToProps, { getAllUsers, getAllRecipes })(portal);

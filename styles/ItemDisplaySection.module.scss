@@ -14,3 +14,51 @@
 .cardUserNameText{
     font-size: 1.2rem;
 }
+
+.timeStamp{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 15px;
+    font-size: 0.7rem;
+    text-align: right;
+}
+.recipeCardGrid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-areas: 
+    "title title title badge"
+    "description description description description"
+    "description description description description"
+    "button button button timestamp"
+}
+.recipeCardUserNameText{
+    grid-area: title;
+}
+.recipeCardDescription{
+    grid-area: description;
+}
+
+.recipeCardButtonContainer{
+    grid-area: button;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 0px;
+    margin-top: auto;
+}
+.badgeContainer{
+    grid-area: badge;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas: 
+    "isHot isGlutenFree isInStock";
+    justify-content: center;
+    justify-items: center;
+    align-content: flex-start;
+    svg{
+        height: 32px;
+        width: auto;
+    }
+}

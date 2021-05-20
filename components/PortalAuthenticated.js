@@ -4,25 +4,34 @@ import PortalLeftTab from "./PortalLeftTab";
 import FormInput from "./FormInput";
 import { data, submissionHandler } from "./dataForForm";
 import { connect } from "react-redux";
-import { addNewUser, getAllUsers } from "../stateManagement/userActions";
+import {
+  addNewUser,
+  getAllUsers,
+  updateUserInfo,
+} from "../stateManagement/userActions";
+import { addNewRecipe } from "../stateManagement/recipeActions";
 import { toggleLeftTab } from "../stateManagement/uiActions";
 import ItemDisplaySection from "./cmsItemSection/ItemDisplaySection";
 import { FcNext } from "react-icons/fc";
 import {
   RETURN_SINGLE_ITEM,
   TOGGLE_EDIT_STATE,
+  RETURN_SINGLE_RECIPE,
 } from "../stateManagement/TYPES";
 import { useDispatch } from "react-redux";
-
+import store from "../stateManagement/store";
 const PortalAuthenticated = ({
   user,
   UI: {
     leftTab: { isOpen },
     isEditing,
   },
+  recipes: { allRecipes, filtered: filteredRecipes },
   props: { toggleModal },
   addNewUser,
+  updateUserInfo,
   toggleLeftTab,
+  addNewRecipe,
 }) => {
   const dispatch = useDispatch();
   const [selected, setSelected] = useState(data.categories[0]);
@@ -35,7 +44,15 @@ const PortalAuthenticated = ({
       Password: "",
       ["Confirm Password"]: "",
     },
-    Recipes: { ["In Stock"]: false, ["Gluten Free"]: false, ["Spicy"]: false },
+    Recipes: {
+      ["In Stock"]: false,
+      ["Gluten Free"]: false,
+      ["Spicy"]: false,
+      Price: "",
+      Category: "",
+      Title: "",
+      Description: "",
+    },
   };
   const [formData, setFormData] = useState(initialFormData);
   const [dataArray, setDataArray] = useState([]);
@@ -49,19 +66,64 @@ const PortalAuthenticated = ({
       }
     }
     if (selected.name === "Recipes") {
-      setDataArray([]);
+      console.log("filteredRecipes", filteredRecipes);
+      if (isEditing) {
+        return setDataArray(filteredRecipes);
+      } else {
+        return setDataArray(allRecipes);
+      }
     }
   };
 
   const handleEditState = (obj) => {
-    console.log("Did trigger edit state function with: ", obj);
-    setSelectedItem(obj ? obj : {});
+    if (obj.firstName) {
+      // only users pass in here
+      setSelectedItem(
+        obj
+          ? {
+              ["First Name"]: obj.firstName,
+              ["Last Name"]: obj.lastName,
+              Username: obj.userName,
+              Password: "",
+              createdAt: obj.createdAt,
+              _id: obj._id,
+            }
+          : {}
+      );
+    }
+    if (obj.price) {
+      // Hopefully only recipes in here
+      setSelectedItem(
+        obj
+          ? {
+              ["In Stock"]: obj.isInStock,
+              ["Gluten Free"]: obj.isGlutenFree,
+              Spicy: obj.isHot,
+              Category: obj.category,
+              Title: obj.name,
+              Price: obj.price,
+              _id: obj._id,
+            }
+          : {}
+      );
+    }
+    // setSelectedItem(
+    //   obj
+    //     ? {
+    //         ["First Name"]: obj.firstName,
+    //         ["Last Name"]: obj.lastName,
+    //         Username: obj.userName,
+    //         Password: "",
+    //         createdAt: obj.createdAt,
+    //         _id: obj._id,
+    //       }
+    //     : {}
+    // );
     if (selected.name === "User") {
       dispatch({
         type: RETURN_SINGLE_ITEM,
         payload: { _id: obj._id },
       });
-      // setIsEditing(!isEditing);
       dispatch({ type: TOGGLE_EDIT_STATE });
       setFormData({
         Recipes: { ...formData.Recipes },
@@ -72,6 +134,24 @@ const PortalAuthenticated = ({
           Password: obj.password,
           ["Confirm Password"]: "",
         },
+      });
+    }
+    if (selected.name === "Recipes") {
+      dispatch({
+        type: RETURN_SINGLE_RECIPE,
+        payload: { _id: obj._id },
+      });
+      dispatch({ type: TOGGLE_EDIT_STATE });
+      setFormData({
+        Recipes: {
+          ["In Stock"]: obj.isInStock,
+          ["Gluten Free"]: obj.isGlutenFree,
+          Spicy: obj.isHot,
+          Category: obj.category,
+          Title: obj.name,
+          Price: obj.price,
+        },
+        User: { ...formData.User },
       });
     }
   };
@@ -89,13 +169,12 @@ const PortalAuthenticated = ({
 
   const setSelectedCategory = (category) => {
     let filtered = data.categories.filter((d) => d.name === category);
-    // setFormData({});
-    // setIsEditing(false);
     if (isEditing === true) {
       dispatch({ type: TOGGLE_EDIT_STATE });
     }
     setSelected(filtered[0]);
   };
+
   const handleSubmission = async (e) => {
     if (selected.name === "User" && !isEditing) {
       let x = await addNewUser(formData[selected.name]);
@@ -115,6 +194,20 @@ const PortalAuthenticated = ({
             });
         }
       }
+    }
+    if (selected.name === "User" && isEditing) {
+      let x = await updateUserInfo(selectedItem);
+      if (x) {
+        setFormData({
+          ...formData,
+          Recipes: { ...formData.Recipes },
+          User: { ...initialFormData.User },
+        });
+      }
+    }
+    if (selected.name === "Recipes" && !isEditing) {
+      console.log("Sending...", formData.Recipes);
+      await addNewRecipe(formData.Recipes);
     }
   };
 
@@ -156,6 +249,8 @@ const PortalAuthenticated = ({
               setFormData={setFormData}
               formData={formData}
               selected={selected}
+              selectedItem={selectedItem}
+              setSelectedItem={setSelectedItem}
             />
           ))}
           <div class="d-grid gap-2">
@@ -182,6 +277,8 @@ const PortalAuthenticated = ({
         dataArray={dataArray}
         selected={selected}
         handleEditState={handleEditState}
+        selectedItem={selectedItem}
+        formData={formData}
       />
       <style jsx global>
         {`
@@ -218,9 +315,13 @@ const PortalAuthenticated = ({
 const mapStateToProps = (state, props) => ({
   user: state.user,
   UI: state.UI,
+  recipes: state.recipes,
   props: props,
 });
 
-export default connect(mapStateToProps, { addNewUser, toggleLeftTab })(
-  PortalAuthenticated
-);
+export default connect(mapStateToProps, {
+  addNewUser,
+  toggleLeftTab,
+  updateUserInfo,
+  addNewRecipe,
+})(PortalAuthenticated);

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import UserItem from "./UserItem";
+import RecipeItem from "./RecipeItem";
 import styles from "../../styles/ItemDisplaySection.module.scss";
 
 const ItemDisplaySection = ({
   user,
-  props: { dataArray, selected, handleEditState },
+  props: { dataArray, selected, handleEditState, selectedItem, formData },
 }) => {
   switch (selected.name) {
     case "User":
@@ -16,6 +17,22 @@ const ItemDisplaySection = ({
               item={item}
               key={item._id}
               handleEditState={handleEditState}
+              selectedItem={selectedItem}
+              formData={formData}
+            />
+          ))}
+        </div>
+      );
+    case "Recipes":
+      return (
+        <div className={styles.itemDisplaySectionWrapper}>
+          {dataArray.map((item) => (
+            <RecipeItem
+              item={item}
+              key={item._id}
+              handleEditState={handleEditState}
+              selectedItem={selectedItem}
+              formData={formData}
             />
           ))}
         </div>

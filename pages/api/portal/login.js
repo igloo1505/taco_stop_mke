@@ -8,22 +8,25 @@ var colors = require("colors");
 const handler = nc();
 handler.use(middleware);
 handler.post(async (req, res) => {
-  console.log(colors.bgBlue("Did run in route..."));
+  console.log(colors.bgBlue("Did run in route with...", req.body));
   try {
     const user = await User.findOne({ userName: req.body.email });
-    // const { isMatch } = await User.findOne({
-    //   userName: req.body.email,
-    // }).comparePassword(req.body.password);
-    let isMatch = true;
-    // const { isMatch } = await user.comparePassword(req.body.password);
-    console.log(colors.red("IsMatch!!!"), isMatch);
+    if (!user) {
+      return res.status(401).json({ msg: "User not found" });
+    }
+    const { isMatch, comparison } = await user.comparePassword(
+      req.body.password
+    );
+
+    console.log(colors.red("IsMatch!!!"), isMatch, comparison);
     if (!isMatch) {
       return res.status(401).json({ error: "These passwords do not match." });
     }
+    console.log("user!!!", user);
     if (isMatch) {
       const payload = {
         user: {
-          id: user.id,
+          id: user._id,
         },
       };
       jwt.sign(
@@ -40,7 +43,7 @@ handler.post(async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "There was an error adding that user." });
+    res.status(500).json({ error: "There was an error logging in." });
   }
 });
 
