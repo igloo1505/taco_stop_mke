@@ -180,7 +180,7 @@ export default function modalReducer(state = initialState, action) {
         letTab: { ...state.leftTab },
         alert: {
           alertText: "User was removed.",
-          alertType: "info",
+          alertType: "success",
           isOpen: true,
         },
         isEditing: false,

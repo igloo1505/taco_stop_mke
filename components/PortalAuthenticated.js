@@ -312,6 +312,7 @@ const PortalAuthenticated = ({
           }
           .portalLeftTabWrapper {
             transition: width 0.5s ease-in-out;
+            overflow: visible;
           }
           .portalLeftTabWrapper.closed {
             width: 40px;
@@ -320,6 +321,7 @@ const PortalAuthenticated = ({
           .portalLeftTabInnerWrapper {
             transform: translateX(0);
             transition: transform 0.3s ease-in-out;
+            overflow: visible;
           }
           .leftTabPanelClosed {
             transform: translateX(-100%);

@@ -67,12 +67,13 @@ export default function userReducer(state = initialState, action) {
         allUsers: filteredUsers,
       };
     case REMOVE_USER:
+      let filter = state.allUsers.filter(
+        (u) => u._id !== action.payload.user._id
+      );
       return {
         ...state,
         user: { ...state.user },
-        allUsers: state.allUsers.filter(
-          (u) => u._id !== action.payload.user._id
-        ),
+        allUsers: filter,
       };
     case USER_ERROR:
       return {
