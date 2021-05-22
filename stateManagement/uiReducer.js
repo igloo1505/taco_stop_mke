@@ -14,6 +14,7 @@ import {
   TRIGGER_ALERT,
   DISPOSE_ALERT,
   AUTHENTICATION_ERROR,
+  SET_VIEWPORT_DIMENSIONS,
   REGISTER_NEW_USER,
   GET_ALL_USERS,
   USER_ERROR,
@@ -36,11 +37,40 @@ const initialState = {
     alertType: "",
     isOpen: false,
   },
+  viewport: {
+    isMobile: false,
+    isTablet: false,
+    isDesktop: false,
+    isXL: false,
+    width: null,
+    height: null,
+  },
   leftTab: {
     isOpen: true,
   },
   isEditing: false,
   errors: [],
+};
+const upperLimits = {
+  mobile: 850,
+  tablet: 1350,
+  desktop: 1650,
+  XL: 2400,
+};
+const getDeviceType = (w) => {
+  console.log("Wwwww", w);
+  switch (true) {
+    case w <= upperLimits.mobile:
+      return "isMobile";
+    case w <= upperLimits.tablet:
+      return "isTablet";
+    case w <= upperLimits.desktop:
+      return "isDesktop";
+    case w >= upperLimits.desktop:
+      return "isXL";
+    default:
+      return null;
+  }
 };
 
 export default function modalReducer(state = initialState, action) {
@@ -59,7 +89,23 @@ export default function modalReducer(state = initialState, action) {
         alert: { ...state.alert },
         leftTab: { ...state.leftTab },
       };
-
+    case SET_VIEWPORT_DIMENSIONS:
+      let device = getDeviceType(action.payload.width);
+      console.log("Device type", device);
+      return {
+        ...state,
+        modal: { ...state.modal },
+        alert: { ...state.alert },
+        viewport: {
+          width: action.payload.width,
+          height: action.payload.height,
+          isMobile: device === "isMobile" ? true : false,
+          isTablet: device === "isTablet" ? true : false,
+          isDesktop: device === "isDesktop" ? true : false,
+          isXL: device === "isXL" ? true : false,
+        },
+        leftTab: { ...state.leftTab },
+      };
     case TRIGGER_ALERT:
       return {
         ...state,
