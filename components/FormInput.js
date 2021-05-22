@@ -68,6 +68,25 @@ const FormInput = ({
           />
         </div>
       );
+    case "textArea":
+      return (
+        <div className="mb-3">
+          <label for={k.display} className="form-label">
+            {k.display}
+          </label>
+          <textarea
+            class="form-control"
+            aria-label="With textarea"
+            style={{ height: "115px" }}
+            onChange={(e) => handleChange(e.target.value)}
+            value={
+              isEditing
+                ? selectedItem[k.display]
+                : formData[selected.name][k.display]
+            }
+          ></textarea>
+        </div>
+      );
     case "password":
       return (
         <div className="mb-3">

@@ -1,15 +1,24 @@
 import React, { useEffect } from "react";
 import styles from "../../styles/ItemDisplaySection.module.scss";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import { GiCampfire, GiWheat } from "react-icons/gi";
 import { FcHighPriority, FcCancel } from "react-icons/fc";
+import {
+  TRIGGER_MODAL,
+  TOGGLE_MODAL,
+  MODAL_CONFIRMED,
+  MODAL_DISMISSED,
+} from "../../stateManagement/TYPES";
+import { deleteRecipe } from "../../stateManagement/recipeActions";
 
 const RecipeItem = ({
   UI: { isEditing },
   recipes: { allRecipes },
   props: { item, key, handleEditState, selectedItem, formData },
+  deleteRecipe,
 }) => {
+  const dispatch = useDispatch();
   useEffect(() => {
     if (typeof window !== "undefined") {
       var tooltipTriggerList = [].slice.call(
@@ -56,6 +65,31 @@ const RecipeItem = ({
     } else return false;
   };
 
+  const handleDeleteRecipe = () => {
+    dispatch({
+      type: TRIGGER_MODAL,
+      payload: {
+        modalText: `Are you sure you want to delete ${name}?`,
+        modalHeader: "Are you sure?",
+        isConfirmation: true,
+        isOpen: true,
+      },
+    });
+    let confirm = document.getElementById("modalConfirmationButton");
+    let denied = document.getElementById("modalDeniedButton");
+    let deniedX = document.getElementById("modalDeniedButtonX");
+    denied.addEventListener("click", (e) => {
+      dispatch({ type: MODAL_DISMISSED });
+    });
+    deniedX.addEventListener("click", (e) => {
+      dispatch({ type: MODAL_DISMISSED });
+    });
+    confirm.addEventListener("click", (e) => {
+      deleteRecipe({ id: _id });
+      dispatch({ type: MODAL_CONFIRMED });
+    });
+  };
+
   return (
     <div className="card bg-light">
       <div className={styles.recipeCardGrid}>
@@ -64,7 +98,9 @@ const RecipeItem = ({
           <br />
           {isSelectedAndEditing() ? selectedItem.Price : price}
         </div>
-        <div className={styles.recipeCardDescription}>{description}</div>
+        <div className={styles.recipeCardDescription}>
+          {isSelectedAndEditing() ? selectedItem.Description : description}
+        </div>
         <div className={styles.timeStamp}>
           Created on: {dayjs(createdAt).format("MM/DD/YYYY")} <br /> Updated on:{" "}
           {dayjs(updatedAt).format("MM/DD/YYYY")}
@@ -157,7 +193,7 @@ const RecipeItem = ({
             type="button"
             className="btn btn-outline-danger"
             style={isEditing ? { display: "none" } : { marginLeft: "5px" }}
-            //   onClick={handleDeleteUser}
+            onClick={handleDeleteRecipe}
           >
             Delete
           </button>
@@ -188,4 +224,4 @@ const mapStateToProps = (state, props) => ({
   recipes: state.recipes,
   props: props,
 });
-export default connect(mapStateToProps)(RecipeItem);
+export default connect(mapStateToProps, { deleteRecipe })(RecipeItem);

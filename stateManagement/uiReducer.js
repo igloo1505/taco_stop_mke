@@ -1,5 +1,6 @@
 import {
   TOGGLE_MODAL,
+  RECIPE_ERROR,
   TRIGGER_MODAL,
   SET_MODAL_CONTENT,
   MODAL_CONFIRMED,
@@ -8,6 +9,7 @@ import {
   TOGGLE_LEFT_TAB,
   TOGGLE_EDIT_STATE,
   UPDATE_USER_INFO,
+  EDIT_MENU_ITEM,
   SET_MODAL_INSTANCE,
   TRIGGER_ALERT,
   DISPOSE_ALERT,
@@ -121,6 +123,18 @@ export default function modalReducer(state = initialState, action) {
         },
         isEditing: !state.isEditing,
       };
+    case EDIT_MENU_ITEM:
+      return {
+        ...state,
+        modal: { ...state.modal },
+        letTab: { ...state.leftTab },
+        alert: {
+          alertText: "Recipe was updated successfully",
+          alertType: "success",
+          isOpen: true,
+        },
+        isEditing: !state.isEditing,
+      };
     case AUTHENTICATION_ERROR:
       return {
         ...state,
@@ -133,6 +147,20 @@ export default function modalReducer(state = initialState, action) {
         },
         isEditing: false,
       };
+    case USER_ERROR:
+    case RECIPE_ERROR:
+      return {
+        ...state,
+        modal: { ...state.modal },
+        letTab: { ...state.leftTab },
+        alert: {
+          alertText: "An error occurred.",
+          alertType: "danger",
+          isOpen: true,
+        },
+        isEditing: false,
+      };
+
     case REGISTER_NEW_USER:
       return {
         ...state,

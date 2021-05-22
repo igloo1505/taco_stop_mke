@@ -31,6 +31,7 @@ const recipeReducer = (state = initialState, action) => {
         loading: true,
       };
     case ADD_MENU_ITEM:
+      console.log("action.payload", action.payload);
       return {
         ...state,
         allRecipes: [...state.allRecipes, action.payload],
@@ -48,6 +49,26 @@ const recipeReducer = (state = initialState, action) => {
         allRecipes: action.payload,
         loading: false,
       };
+
+    case EDIT_MENU_ITEM:
+      let filteredRecipes = state.allRecipes.filter(
+        (r) => r._id !== action.payload._id
+      );
+      filteredRecipes.push(action.payload);
+      return {
+        ...state,
+        allRecipes: filteredRecipes,
+        loading: false,
+      };
+    case REMOVE_MENU_ITEM:
+      return {
+        ...state,
+        allRecipes: state.allRecipes.filter(
+          (r) => r._id !== action.payload._id
+        ),
+        loading: false,
+      };
+
     default:
       return state;
   }

@@ -9,7 +9,7 @@ import {
   getAllUsers,
   updateUserInfo,
 } from "../stateManagement/userActions";
-import { addNewRecipe } from "../stateManagement/recipeActions";
+import { addNewRecipe, updateRecipe } from "../stateManagement/recipeActions";
 import { toggleLeftTab } from "../stateManagement/uiActions";
 import ItemDisplaySection from "./cmsItemSection/ItemDisplaySection";
 import { FcNext } from "react-icons/fc";
@@ -32,6 +32,7 @@ const PortalAuthenticated = ({
   updateUserInfo,
   toggleLeftTab,
   addNewRecipe,
+  updateRecipe,
 }) => {
   const dispatch = useDispatch();
   const [selected, setSelected] = useState(data.categories[0]);
@@ -93,6 +94,7 @@ const PortalAuthenticated = ({
     }
     if (obj.price) {
       // Hopefully only recipes in here
+      console.log("obj", obj);
       setSelectedItem(
         obj
           ? {
@@ -100,6 +102,7 @@ const PortalAuthenticated = ({
               ["Gluten Free"]: obj.isGlutenFree,
               Spicy: obj.isHot,
               Category: obj.category,
+              Description: obj.description,
               Title: obj.name,
               Price: obj.price,
               _id: obj._id,
@@ -165,7 +168,7 @@ const PortalAuthenticated = ({
 
   useEffect(() => {
     setData();
-  }, [selected.name, user, isEditing]);
+  }, [selected.name, user, isEditing, allRecipes]);
 
   const setSelectedCategory = (category) => {
     let filtered = data.categories.filter((d) => d.name === category);
@@ -207,7 +210,22 @@ const PortalAuthenticated = ({
     }
     if (selected.name === "Recipes" && !isEditing) {
       console.log("Sending...", formData.Recipes);
+      setFormData({
+        ...formData,
+        Recipes: { ...initialFormData.Recipes },
+        User: { ...formData.User },
+      });
       await addNewRecipe(formData.Recipes);
+    }
+    if (selected.name === "Recipes" && isEditing) {
+      await updateRecipe(selectedItem);
+      console.log("formData", formData);
+      console.log("initalFormData", initialFormData);
+      setFormData({
+        ...formData,
+        Recipes: { ...initialFormData.Recipes },
+        User: { ...formData.User },
+      });
     }
   };
 
@@ -324,4 +342,5 @@ export default connect(mapStateToProps, {
   toggleLeftTab,
   updateUserInfo,
   addNewRecipe,
+  updateRecipe,
 })(PortalAuthenticated);

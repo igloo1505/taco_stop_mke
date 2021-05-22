@@ -9,7 +9,7 @@ export const data = {
           dataSet: ["Specialty", "Side", "Drink", "Desert"],
         },
         { display: "Title", type: "string" },
-        { display: "Description", type: "string" },
+        { display: "Description", type: "textArea" },
         { display: "Price", type: "number" },
         { display: "In Stock", type: "boolean" },
         { display: "Spicy", type: "boolean" },

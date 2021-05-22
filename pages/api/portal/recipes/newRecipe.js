@@ -29,11 +29,12 @@ handler.post(async (req, res) => {
     };
     let recipe = new Recipe(data);
     console.log(recipe);
-    await recipe.save();
+    let returned = await recipe.save();
+    console.log("returned", returned.errors);
     return res.json(recipe);
   } catch (error) {
     console.log("Return this error?", error);
-    return res.json({
+    return res.statusCode(500).json({
       msg: "There was an error saving that recipe to the database.",
     });
   }
