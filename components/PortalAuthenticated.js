@@ -326,6 +326,11 @@ const PortalAuthenticated = ({
           .leftTabPanelClosed {
             transform: translateX(-100%);
           }
+          @media only screen and (max-width: 850px) {
+            .portalLeftTabWrapper {
+              display: none;
+            }
+          }
         `}
       </style>
     </div>

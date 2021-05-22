@@ -13,7 +13,19 @@
         .portalAuthenticatedOuterWrapper{
             display: grid;
             width: 100%;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: auto 1fr 1fr;
             grid-template-areas: "portalForm portalCardDisplay";
         }
       }
+
+@media only screen and (max-width: 850px) {
+    .portalLeftTabWrapper{
+        display: none;
+    }
+        .portalAuthenticatedOuterWrapper{
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+        }
+      }
+      

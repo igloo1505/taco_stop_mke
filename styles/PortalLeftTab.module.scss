@@ -1,5 +1,4 @@
 
-
 .portalLeftTab{
     padding: 0.5rem 1rem 0.5rem 0.5rem;
     border: 1px solid #ccc;
@@ -7,14 +6,21 @@
     font-size: 1.2rem;
     border-radius: 0 20px 20px 0;
     // transform: translateX(-90%);
+    transform-style: preserve-3d;
     transition: transform 0.3s ease-in-out;
     margin-top: 5px;
+    // margin: 15px 12px 12px 0px;
+    // width: 100%;
+    box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);
 }
 .portalLeftTab:hover{
     // transform: translateX(0%)
-    transform: scale3d(1, 1, 1.1) translateX(-3px);
-    border: 3px solid #ccc;
+    transform-style: preserve-3d;
+    transform: scale3d(1.1, 1.1, 1.1);
+    // border: 3px solid #ccc;
+    box-shadow: 0 7px 30px -10px rgba(150,170,180,0.5);
     z-index: 10;
+    cursor: pointer;
 }
 .formInput{
     display: inline-block;
