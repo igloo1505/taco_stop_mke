@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 const FormInput = ({
   props: { k, setFormData, formData, selected, selectedItem, setSelectedItem },
+  viewport: { isTablet, isMobile, isDesktop },
   UI: { isEditing },
 }) => {
   const [booleanToggle, setBooleanToggle] = useState(false);
@@ -17,8 +18,10 @@ const FormInput = ({
       setBooleanToggle(false);
     }
   }, [isEditing, selectedItem]);
+  const wasSelected = () => {
+    console.log(k, selected);
+  };
   const handleChange = (value) => {
-    console.log(value, k.display);
     // console.log("Change: ", selected.name, formData, k.display, selectedItem);
     if (!isEditing) {
       setFormData({
@@ -34,43 +37,32 @@ const FormInput = ({
     }
   };
 
-  const handleSwitchState = () => {
-    debugger;
-    console.log("Running switch state");
-    if (isEditing) {
-      return selectedItem[k.display];
-    }
-    if (!isEditing) {
-      return booleanToggle;
-    }
-  };
-
   // TODO Add form validation on frontend to check password confirmation and validate password and email fields. Consider adding other fields for phone number and email.
 
   switch (k.type) {
     case "string":
       return (
-        <div className="mb-3">
+        <div className="mb-3" id={`${selected.name}Dot${k.display}`}>
           <label for={k.display} className="form-label">
             {k.display}
           </label>
           <input
             type="email"
             className="form-control"
-            id={k.display}
             aria-describedby="emailHelp"
             value={
               isEditing
                 ? selectedItem[k.display]
                 : formData[selected.name][k.display]
             }
+            onSelect={wasSelected}
             onChange={(e) => handleChange(e.target.value)}
           />
         </div>
       );
     case "textArea":
       return (
-        <div className="mb-3">
+        <div className="mb-3" id={`${selected.name}Dot${k.display}`}>
           <label for={k.display} className="form-label">
             {k.display}
           </label>
@@ -89,16 +81,14 @@ const FormInput = ({
       );
     case "password":
       return (
-        <div className="mb-3">
+        <div className="mb-3" id={`${selected.name}Dot${k.display}`}>
           <label for={k.display} className="form-label">
             {k.display}
           </label>
           <input
             type="password"
             className="form-control"
-            id={k.display}
             aria-describedby="emailHelp"
-            // value={formData[selected.name][k.display]}
             value={
               isEditing
                 ? selectedItem[k.display]
@@ -109,13 +99,14 @@ const FormInput = ({
         </div>
       );
     case "boolean":
-      console.log("k display in boolean iput", k.display);
       return (
-        <div className="mb-1 form-check form-switch">
+        <div
+          className="mb-1 form-check form-switch"
+          id={`${selected.name}Dot${k.display}`}
+        >
           <input
             type="checkbox"
             className="form-check-input"
-            id={k.display}
             value={
               isEditing
                 ? selectedItem[k.display]
@@ -134,14 +125,13 @@ const FormInput = ({
       );
     case "select":
       return (
-        <div className="mb-3">
+        <div className="mb-3" id={`${selected.name}Dot${k.display}`}>
           <label className="form-check-label" for={k.display}>
             {k.display}
           </label>
           <select
             className="form-select form-select-sm"
             aria-label="Category"
-            id={k.display}
             value={
               isEditing
                 ? selectedItem[k.display]
@@ -158,14 +148,13 @@ const FormInput = ({
       );
     case "number":
       return (
-        <div className="mb-3">
+        <div className="mb-3" id={`${selected.name}Dot${k.display}`}>
           <label for={k.display} className="form-label">
             {k.display}
           </label>
           <input
             type="number"
             className="form-control"
-            id={k.display}
             aria-describedby="emailHelp"
             value={
               isEditing
@@ -182,6 +171,7 @@ const FormInput = ({
 
 const mapStateToProps = (state, props) => ({
   UI: state.UI,
+  viewport: state.UI.viewport,
   props: props,
 });
 

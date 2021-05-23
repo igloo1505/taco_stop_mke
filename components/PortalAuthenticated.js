@@ -67,7 +67,6 @@ const PortalAuthenticated = ({
       }
     }
     if (selected.name === "Recipes") {
-      console.log("filteredRecipes", filteredRecipes);
       if (isEditing) {
         return setDataArray(filteredRecipes);
       } else {
@@ -260,34 +259,54 @@ const PortalAuthenticated = ({
       </div>
       <div className={styles.formWrapper}>
         <form>
-          {selected.keys.map((k) => (
-            <FormInput
-              k={k}
-              setSelectedCategory={setSelectedCategory}
-              setFormData={setFormData}
-              formData={formData}
-              selected={selected}
-              selectedItem={selectedItem}
-              setSelectedItem={setSelectedItem}
-            />
-          ))}
-          <div class="d-grid gap-2">
-            <button
-              type="button"
-              class="btn btn-warning"
-              onClick={(e) => cancelEditState(e)}
-              style={isEditing ? { display: "block" } : { display: "none" }}
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              style={{ float: "right" }}
-              onClick={(e) => handleSubmission(e)}
-            >
-              {isEditing ? "Edit" : "Submit"}
-            </button>
+          {selected.keys
+            .filter((k) => k.type !== "boolean")
+            .map((k) => (
+              <FormInput
+                k={k}
+                setSelectedCategory={setSelectedCategory}
+                setFormData={setFormData}
+                formData={formData}
+                selected={selected}
+                selectedItem={selectedItem}
+                setSelectedItem={setSelectedItem}
+              />
+            ))}
+
+          <div className="booleanOuterWrapper">
+            <div className="booleanWrapper">
+              {selected.keys
+                .filter((k) => k.type === "boolean")
+                .map((k) => (
+                  <FormInput
+                    k={k}
+                    setSelectedCategory={setSelectedCategory}
+                    setFormData={setFormData}
+                    formData={formData}
+                    selected={selected}
+                    selectedItem={selectedItem}
+                    setSelectedItem={setSelectedItem}
+                  />
+                ))}
+            </div>
+            <div class="d-grid gap-2 buttonContainer">
+              <button
+                type="button"
+                class="btn btn-warning formCancelButton"
+                onClick={(e) => cancelEditState(e)}
+                style={isEditing ? { display: "block" } : { display: "none" }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary formSubmitBtn"
+                style={{ float: "right" }}
+                onClick={(e) => handleSubmission(e)}
+              >
+                {isEditing ? "Edit" : "Submit"}
+              </button>
+            </div>
           </div>
         </form>
       </div>
@@ -306,6 +325,7 @@ const PortalAuthenticated = ({
             transition: transform 0.3s ease-in-out;
             border-radius: 5px;
             margin: 0.5rem;
+            cursor: pointer;
           }
           .rotatedIcon {
             transform: rotateY(0deg);
@@ -313,6 +333,8 @@ const PortalAuthenticated = ({
           .portalLeftTabWrapper {
             transition: width 0.5s ease-in-out;
             overflow: visible;
+            padding-top: 10px;
+            padding-bottom: 10px;
           }
           .portalLeftTabWrapper.closed {
             width: 40px;
@@ -329,6 +351,49 @@ const PortalAuthenticated = ({
           @media only screen and (max-width: 850px) {
             .portalLeftTabWrapper {
               display: none;
+            }
+            .buttonContainer {
+              grid-template-columns: 1fr 1fr;
+              grid-template-areas: "cancelBtn submitBtn";
+              justify-items: flex-end;
+            }
+            .formSubmitBtn {
+              width: 150px;
+              grid-area: submitBtn;
+              float: right;
+            }
+            .booleanWrapper {
+              display: flex;
+              width: 100%;
+              justify-content: space-between;
+              padding: 20px;
+            }
+          }
+          @media only screen and (max-width: 850px) {
+            .buttonContainer {
+              grid-template-rows: 1fr 1fr;
+              grid-template-areas: "cancelBtn submitBtn";
+              justify-items: flex-end;
+            }
+          }
+          @media only screen and (max-width: 450px) {
+            .buttonContainer {
+              grid-template-rows: 1fr 1fr;
+              grid-template-columns: 1fr;
+              grid-template-areas: "cancelBtn" "submitBtn";
+            }
+            .booleanWrapper {
+              flex-direction: column;
+            }
+            .booleanOuterWrapper {
+              display: grid;
+              grid-template-columns: 1fr 120px;
+            }
+            .formSubmitBtn {
+              width: 100%;
+              height: 3rem;
+              grid-area: submitBtn;
+              float: right;
             }
           }
         `}

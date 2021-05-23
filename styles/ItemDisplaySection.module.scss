@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: fit-content;
 }
 
 .cardButtonContainer{
@@ -25,6 +26,7 @@
 }
 .recipeCardGrid{
     display: grid;
+    height: 100%;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
     grid-template-areas: 
@@ -74,5 +76,28 @@
     .badgeContainer svg{
         height: 16px;
         width: auto;
+    }
+  }
+
+  @media only screen and (min-width: 1650px) {
+    .wrapperWithUser{
+        // display: flex;
+        // flex-direction: row;
+        // flex-wrap: wrap;
+        // height: fit-content;
+        // flex-grow: row;
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    }
+    .wrapperWithRecipes{
+        // display: flex;
+        // flex-direction: row;
+        // flex-wrap: wrap;
+        // height: fit-content;
+        // flex-grow: row;
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));
     }
   }

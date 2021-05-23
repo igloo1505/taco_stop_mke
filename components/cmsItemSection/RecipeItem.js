@@ -90,6 +90,24 @@ const RecipeItem = ({
     });
   };
 
+  const getDescription = (strang) => {
+    let x;
+    let limit = 400;
+    if (strang) {
+      if (strang.length < limit) {
+        return strang;
+      }
+      if (!isEditing) {
+        x = strang.slice(0, limit - 3);
+        x = x + "...";
+        return x;
+      }
+      if (isEditing) {
+        return strang;
+      }
+    }
+  };
+
   return (
     <div className="card bg-light">
       <div className={styles.recipeCardGrid}>
@@ -99,7 +117,9 @@ const RecipeItem = ({
           {isSelectedAndEditing() ? selectedItem.Price : price}
         </div>
         <div className={styles.recipeCardDescription}>
-          {isSelectedAndEditing() ? selectedItem.Description : description}
+          {isSelectedAndEditing()
+            ? getDescription(selectedItem.Description)
+            : getDescription(description)}
         </div>
         <div className={styles.timeStamp}>
           Created on: {dayjs(createdAt).format("MM/DD/YYYY")} <br /> Updated on:{" "}
@@ -202,8 +222,9 @@ const RecipeItem = ({
       <style jsx>
         {`
           .card {
-            width: 90%;
+            box-sizing: border-box;
             min-height: 150px;
+            height: 280px;
             padding: 16px;
             margin: 12px 5%;
             box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);

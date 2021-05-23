@@ -118,6 +118,14 @@ const UserItem = ({
           .card:hover {
             box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
           }
+          @media only screen and (min-width: 1650px) {
+            .card {
+              margin: 10px;
+              width: auto;
+              // height: 100%;
+              margin: 0.7rem;
+            }
+          }
         `}
       </style>
     </div>

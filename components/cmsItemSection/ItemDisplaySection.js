@@ -11,7 +11,9 @@ const ItemDisplaySection = ({
   switch (selected.name) {
     case "User":
       return (
-        <div className={styles.itemDisplaySectionWrapper}>
+        <div
+          className={`${styles.wrapperWithUser} ${styles.itemDisplaySectionWrapper}`}
+        >
           {dataArray.map((item) => (
             <UserItem
               item={item}
@@ -25,7 +27,9 @@ const ItemDisplaySection = ({
       );
     case "Recipes":
       return (
-        <div className={styles.itemDisplaySectionWrapper}>
+        <div
+          className={`${styles.wrapperWithRecipes} ${styles.itemDisplaySectionWrapper}`}
+        >
           {dataArray.map((item) => (
             <RecipeItem
               item={item}
