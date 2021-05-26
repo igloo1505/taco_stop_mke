@@ -8,7 +8,7 @@ import {
 import userReducer from "./userReducer";
 import recipeReducer from "./recipeReducer";
 import uiReducer from "./uiReducer";
-// import rootReducer from "./rootReducer";
+import tacoReducer from "./tacoReducer";
 
 const initialState = {};
 
@@ -22,6 +22,7 @@ const store = configureStore({
     user: userReducer,
     UI: uiReducer,
     recipes: recipeReducer,
+    tacos: tacoReducer,
   },
   devTools: () => withDevtools(),
 });

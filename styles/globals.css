@@ -14,8 +14,15 @@ a {
   box-sizing: border-box;
   /* overflow: hidden; */
   overflow-x: hidden;
+  background-color: #fff;
 }
 
+.alert div{
+  background-color: transparent;
+}
+.alert svg{
+  background-color: transparent;
+}
 @media only screen and (max-width: 850px) {
   #RecipesDotTitle {
     max-width: calc(50% - 20px);

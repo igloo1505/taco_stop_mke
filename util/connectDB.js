@@ -26,7 +26,7 @@ const connectDB = (handler, isProtected) => async (req, res) => {
     });
 };
 
-const middleware = nc();
+// const middleware = nc();
 // const middlewareWithAuth = nc();
 // console.log("MIDDLEWARE", middleware);
 // middleware.use(database);
@@ -38,13 +38,12 @@ const middleware = nc();
 //   connectDB();
 //   next();
 // });
-middleware.use(async (req, res, next) => {
-  connectDB();
-  next();
-});
+// middleware.use(async (req, res, next) => {
+//   connectDB();
+//   next();
+// });
 
 // middleware.use(authMiddleware);
 module.exports = {
   connectDB,
-  middleware,
 };

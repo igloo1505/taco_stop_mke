@@ -10,13 +10,7 @@ import {
 } from "./TYPES";
 
 const initialState = {
-  token: () => {
-    if (typeof window !== "undefined") {
-      return window.localStorage.getItem("token");
-    } else {
-      return null;
-    }
-  },
+  token: "",
   loading: false,
   allRecipes: [],
   filtered: null,
@@ -31,6 +25,7 @@ const recipeReducer = (state = initialState, action) => {
         loading: true,
       };
     case ADD_MENU_ITEM:
+      console.log("action.payload", action.payload);
       console.log("action.payload", action.payload);
       return {
         ...state,

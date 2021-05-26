@@ -12,13 +12,7 @@ import {
 
 const initialState = {
   loggedIn: true,
-  token: () => {
-    if (typeof window !== "undefined") {
-      return window.localStorage.getItem("token");
-    } else {
-      return null;
-    }
-  },
+  token: "",
   allUsers: [],
   filtered: null,
   loading: false,

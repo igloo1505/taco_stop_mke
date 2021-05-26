@@ -224,7 +224,7 @@ const RecipeItem = ({
           .card {
             box-sizing: border-box;
             min-height: 150px;
-            height: 280px;
+            height: max(280px, fit-content);
             padding: 16px;
             margin: 12px 5%;
             box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);

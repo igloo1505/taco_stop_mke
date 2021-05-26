@@ -5,6 +5,7 @@ import PortalAuthenticated from "../components/PortalAuthenticated";
 import { connect } from "react-redux";
 import { getAllUsers } from "../stateManagement/userActions";
 import { getAllRecipes } from "../stateManagement/recipeActions";
+import { getAllTacoIngredients } from "../stateManagement/tacoActions";
 import { GET_ALL_USERS, USER_ERROR } from "../stateManagement/TYPES";
 import axios from "axios";
 import ModalWithConfirmation from "../components/Modal";
@@ -17,10 +18,12 @@ const portal = ({
   },
   getAllUsers,
   getAllRecipes,
+  getAllTacoIngredients,
 }) => {
   useEffect(async () => {
     await getAllRecipes();
     await getAllUsers();
+    await getAllTacoIngredients();
   }, []);
 
   const [showModal, setShowModal] = useState(false);
@@ -55,4 +58,8 @@ const mapStateToProps = (state, props) => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps, { getAllUsers, getAllRecipes })(portal);
+export default connect(mapStateToProps, {
+  getAllUsers,
+  getAllRecipes,
+  getAllTacoIngredients,
+})(portal);

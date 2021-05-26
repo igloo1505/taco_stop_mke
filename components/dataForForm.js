@@ -33,10 +33,96 @@ export const data = {
       name: "Tacos",
       keys: [],
       subCategories: [
-        { display: "Tortilla", type: "string" },
-        { display: "Protein", type: "string" },
-        { display: "Toppings", type: "string" },
-        { display: "Add-on", type: "string" },
+        {
+          name: "Tortilla",
+          type: "string",
+          keys: [
+            {
+              display: "Type",
+              type: "string",
+              dataSet: ["Flour", "Whole Wheat", "Gluten Free"],
+            },
+            {
+              display: "Gluten Free",
+              type: "boolean",
+            },
+            {
+              display: "In Stock",
+              type: "boolean",
+            },
+          ],
+        },
+        {
+          name: "Protein",
+          type: "string",
+          keys: [
+            {
+              display: "Name",
+              type: "string",
+            },
+            {
+              display: "Description",
+              type: "textArea",
+            },
+            {
+              display: "Gluten Free",
+              type: "boolean",
+            },
+            {
+              display: "Is Spicy",
+              type: "boolean",
+            },
+            {
+              display: "In Stock",
+              type: "boolean",
+            },
+          ],
+        },
+        {
+          name: "Toppings",
+          type: "string",
+          keys: [
+            {
+              display: "Name",
+              type: "string",
+            },
+            {
+              display: "Gluten Free",
+              type: "boolean",
+            },
+            {
+              display: "Is Spicy",
+              type: "boolean",
+            },
+            {
+              display: "In Stock",
+              type: "boolean",
+            },
+          ],
+        },
+        {
+          name: "Add-on",
+          type: "string",
+          keys: [
+            {
+              display: "Name",
+              type: "string",
+            },
+            {
+              display: "Gluten Free",
+              type: "boolean",
+            },
+            {
+              display: "Is Spicy",
+              type: "boolean",
+            },
+            {
+              display: "In Stock",
+              type: "boolean",
+            },
+          ],
+        },
+        { name: "Back", type: "string" },
       ],
     },
   ],

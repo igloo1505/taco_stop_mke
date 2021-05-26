@@ -16,7 +16,7 @@ const Alert = ({ alert: { alertText, alertType, isOpen } }) => {
     case "success":
       return (
         <div
-          class="alert alert-success d-flex align-items-center"
+          className="alert alert-success d-flex align-items-center"
           role="alert"
           style={
             isOpen
@@ -33,7 +33,7 @@ const Alert = ({ alert: { alertText, alertType, isOpen } }) => {
     case "danger":
       return (
         <div
-          class="alert alert-danger d-flex align-items-center"
+          className="alert alert-danger d-flex align-items-center"
           role="alert"
           style={
             isOpen
@@ -50,7 +50,7 @@ const Alert = ({ alert: { alertText, alertType, isOpen } }) => {
     case "info":
       return (
         <div
-          class="alert alert-primary d-flex align-items-center"
+          className="alert alert-primary d-flex align-items-center"
           role="alert"
           style={
             isOpen

@@ -9,13 +9,8 @@ handler.post(async (req, res) => {
 });
 handler.get(async (req, res) => {
   try {
-    let user = await User.find({});
+    let user = await User.find({}).select("-password");
     let arr = [];
-    for (var i = 0; i < user.length; i++) {
-      let x = user[i]._doc;
-      x = { ...x, password: null };
-      arr.push(x);
-    }
     return res.json({
       user: arr,
     });

@@ -39,6 +39,7 @@
     grid-area: title;
 }
 .recipeCardDescription{
+    overflow: hidden;
     grid-area: description;
 }
 
